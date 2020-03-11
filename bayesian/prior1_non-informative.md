@@ -6,7 +6,7 @@
 
 
 
-![1](img/prior1_1.PNG)
+![1](img/prior1_1.png)
 
 
 
