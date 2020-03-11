@@ -48,7 +48,7 @@ ax[1].set_xlabel('logit')
 ax[1].set_ylabel('p')
 ```
 
-![1](img/prior2_1.png)
+![1](img/prior2_1.PNG)
 
  logit  &tau; = $log \frac {p} {1-p}$  은 이러한 이유로 베르누이 확률의 변수변환으로 알려진 대표적인 것(?) 이라고 할 수 있다. 또 단조증가(monotone increasing)함수 이기 떄문에 1대1 매칭이 가능해져서 회귀모형에서 logit 변형이 가능한것이다. 
 
@@ -74,7 +74,7 @@ plt.ylabel('density')
 plt.ylim(0,2)
 ```
 
-![1](img/prior2_2.png)
+![1](img/prior2_2.PNG)
 
 
 
@@ -101,7 +101,7 @@ plt.ylim(0,1)
 plt.legend()
 ```
 
-![2](img/prior2_3.png)
+![2](img/prior2_3.PNG)
 
 어떠한 선호를 나타내지 않기 위해 선택한 uniform prior가 logit &tau; 로 변환했을 때는 0의 부근에서 높은 확률을 가지는 prior 로 바뀌어 버렸다. **모수에 대해 차별적인 정보가 생겼다!**
 
