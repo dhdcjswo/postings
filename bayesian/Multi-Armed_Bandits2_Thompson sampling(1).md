@@ -2,7 +2,7 @@
 
 
 
-Thompson sampling에 대해서 포스팅을 나누어 작성하려고한다. 이번 포스팅은 intro에 설명했던 greedy 알고리즘과 Thompson sampling을 한번 비교해보도록 하겠다
+Thompson sampling에 대해서 포스팅을 나누어 작성하려고한다. 이번 포스팅은 intro에 설명했던 greedy 알고리즘과 Thompson sampling을 한번 비교해보려고 한다.
 
 
 
@@ -77,3 +77,18 @@ greedy 알고리즘과 Thompson sampling의 차이는 한 가지이다. 전체�
 
 
 
+
+
+## regret
+
+regret은 최적의 의사결정시의 평균보상과 현재시간에서 개인이 선택한 의사결정의 평균보상과의 차이를 의미한다. regret이 크면 최적의 의사 결정보다 평균보상이 많이 작다는 의미이므로 이 **'regret'** 을 줄여나가는것이 목적이라고 할 수 있다.
+$$
+regret_t(\theta) = max_k\theta_k-\theta_{x_t}
+$$
+
+
+![3](img/MCB2-3.PNG)
+
+
+
+알고리즘간의 regret을 비교하여 더 나은 알고리즘을 선택하는 것이 합리적인 선택이다.
