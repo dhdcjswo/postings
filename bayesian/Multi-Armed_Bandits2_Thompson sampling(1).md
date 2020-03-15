@@ -87,7 +87,7 @@ regret_t(\theta) = max_k\theta_k-\theta_{x_t}
 $$
 
 
-![3](img/MCB2-3.png)
+![3](img/MAB2-3.png)
 
 
 
