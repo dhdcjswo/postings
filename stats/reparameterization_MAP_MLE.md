@@ -6,7 +6,7 @@
 
 
 
-그렇다면 오늘 포스팅하려고하는 내용인 MAP 추정은 reparametrization에 대해서 invariance 하지않는 반면에 MLE는 invariant할까?
+오늘 포스팅하려고하는 내용인 MAP 추정은 reparametrization에 대해서 invariance 하지않는 반면에 MLE는 invariant한 성질을 이야기 해보려고한다.
 
 
 
