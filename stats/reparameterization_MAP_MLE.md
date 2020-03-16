@@ -6,7 +6,7 @@
 
 
 
-오늘 포스팅하려고하는 내용인 MAP 추정은 reparametrization에 대해서 invariance 하지않는 반면에 MLE는 invariant한 성질을 이야기 해보려고한다.
+오늘 포스팅은 MAP 추정은 reparametrization에 대해서 invariance 하지않는 반면에 MLE는 invariant한 성질에 대해서 이야기 해보려고한다.
 
 
 
@@ -16,12 +16,7 @@
 
 
 
-반면 MLE는 확률밀도로 구하지 않는다. Likelihood 함수를 통해서 구하고 그렇기에 변화의 제한이 없다. 최댓값이 무엇이든 높이는 변하지 않는다. reparametrization 이후에도 최댓값은 변하지 않는다. 
-
-
-
-likelihood는 data-space에서는 probability density 이다 p(x|&theta;) . 하지만 function은 L(&theta;|X) ,parameter-space에서는 더이상 probability density가 아니다. 이 말인 즉슨 intergral시에 공간상의 제약이 없다.반면 probability density는 제약을 받는다. 
-
+probability density는 제약을 받는다. 
 
 $$
 \int_A{p(y)dy} = \int_A {p(x)dx}
@@ -29,7 +24,15 @@ $$
 
 
 
-이러한 제약이 reparametrization 시 probability densitiy를 변하게 만든다. 왜냐면 그냥 같은 함수값이 integral 했을때 같음을 보장하지 않기 때문에.
+이러한 제약이 reparametrization 시 probability densitiy를 변하게 만든다. 왜냐면 그냥 같은 함수값이 integral 했을때 같음을 보장하지 않기 때문이다.
+
+
+
+반면 MLE는 확률밀도로 구하지 않는다. Likelihood 함수를 통해서 구하고 그렇기에 변화의 제한이 없다. 최댓값이 무엇이든 높이는 변하지 않는다. reparametrization 이후에도 최댓값은 변하지 않는다. 
+
+likelihood는 data-space에서는 probability density 이다 p(x|&theta;) . 모수는 고정되어 있지만 데이터는 랜덤하다는 프리퀀티스트의 관점에 일치하는 내용이다. 하지만 function은 L(&theta;|X) ,parameter-space에서는 더이상 probability density가 아니다. 
+
+Likelihood function은 모수에 대한 관측된 데이터들의 결합확률밀도로 구해진다. 보통 계산을 할때 (i.i.d) 가정을 이용해서 관측치들의 확률밀도의 곱으로 나타내는데, 이렇게 likelihood 함수가 구해지게 되면 데이터들은 더이상 랜덤하지 않다. 이미 실현화된 데이터들을 통해서 likelihood함수를 구했기 떄문이다. 이 상태에서 데이터는 고정되어 있다. 따라서  다음과 같은 L(&theta;|X) 모수에 대한 함수 형태로 수식을 설명한다. 모수 $\theta$ 와 L($\theta$|X) 의 관계에서 $\theta$ 가 어떤식으로 변하든 함수값 L($\theta$|X)의 크기는 변하지 않는다. 모수의 형태변화에 robust한것이다.
 
 
 
