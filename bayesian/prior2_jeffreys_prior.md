@@ -113,18 +113,18 @@ plt.legend()
 
 ​	문제는 이렇다. non-informative prior을 선택하는 경우 변수변환(change of variable)에 의해서 없던 선호가 생겨버리는 것이다. 모수 공간이 discrete 하거나 finite한 경우에 monotone transform에서도 강건하게 선호를 가지지 않는데,  모수공간이 continous 한 경우에는 uniform 분포의 무차별성이 global하게 받아들여지지 않는다. monotone transform의 경우 invariant한 특징, 모수변환에 상관없이 동일한 정보를 가져야한다는 특징이 사라지는 것이 문제이다.
 
- 어떠한 상황에 상관없이 **global** non-informative prior은 없을까. **Jeffrey prior** 은 이러한 문제를 해결해 준다.  모수 &theta; 에 대해서 prior 분포 $\gamma_{\theta}(\theta)$ 를 가정해보자. 이제 모수를 monotone transform 시켜서 $\delta = h(\theta)$ 로 바꿔보자. 
+p에 대해 uniform prior을 사용하는 경우 [0,1] 모든 범위에서 동일한 확률을 가진다. 정보량이 무차별적이다. p와 &delta; 는 one-to-one 대응이 되고 p가 가지는 정보량 만큼 &delta;도 동일하게 가져야 한다. 이것이 **'invariance property'**이다. change of variable로 그 형태가 바뀌어도 동일한 정보량을 가져야 한다.
+
+ 어떠한 상황에 상관없이 **global** non-informative prior은 없을까. **Jeffrey prior** 은 이러한 문제를 해결해 준다.  모수 &theta; 에 대해서 prior 분포 $\delta_{\theta}(\theta)$ 를 가정해보자. 이제 모수를 monotone transform 시켜서 $\delta = h(\theta)$ 로 바꿔보자. 
 
 1. 원래의 모델 : $X \sim f(x|\theta),\space \theta \in \Theta $ 
-2. 변수변환 모델 : $X \sim g(x|\delta), \space \delta \in \xi, \space g(x|\delta)=f(x|h^{-1}(\delta)) \space and \space \xi=h(\Theta)={h(\theta) : \theta \in \Theta} $ 
+2. 변수변환 모델 : $X \sim g(x|\delta), \space \delta \in \xi, \space g(x|\delta)=f(x|h^{-1}(\delta)) \space and \space \delta=h(\Theta)={h(\theta) : \theta \in \Theta} $ 
 
 
 
 
 
-
-
-**Jeffrey prior pdf**은 모수들의 집합 &theta;  에 대해서 다음과 같은 특징을 가진다.
+**Jeffrey prior pdf**은 모수들의 집합 &theta;  에 대해서 다음과 같이 정의된다.
 $$
 \pi(\theta) \propto \sqrt {detI(\theta)}
 $$
@@ -132,32 +132,56 @@ I 는 fisher information 이고 다음과 같이 정의될 수 있다.
 $$
 I_{ij}(\theta) = -E[\frac {\partial^2 lnL} {\partial \theta_i \partial \theta_j}]
 $$
-L은 Likelihood 함수이고 
 
 
-
-
+reparameterization 된 모수 사전분포가 다음과 같을 때
 $$
-\gamma_{\tau}(\tau) =
+p(\delta) \propto \sqrt {I(\delta)}
 $$
-
-
-
-
+원래 모수의 사전분포 $p(\theta) \propto \sqrt{I(\theta)}$ 로 부터 도출할 수 있다.
 $$
 \begin{matrix}
-I_{\theta}^F(\theta) &=& \int \{\frac {\partial} {\partial \theta} log \space f(x|\theta)\}^2 f(x|\theta)dx \\ 
-&=& \int \{\frac {\partial} {\partial \theta} log\space g(x|h(\theta)\}^2 g(x|h(\theta)dx \\
-&=& \int \{\frac {\partial} {\partial \gamma} log \space g(x|\gamma) h^`(\theta)\}^2g(x|h(\theta)dx\space <-[chain\space rule ] \\
-&=& \{h^`(\theta)\}^2I_{\gamma}^F(h(\theta))
+p(\delta) &=& p(\theta)|\frac {d\theta} {d\delta}| \\
+&\propto& \sqrt {I(\theta)(\frac {d\theta} {d\delta})^2}=\sqrt {E[(\frac {dlnL} {d\theta})^2](\frac {d\theta} {d\delta})^2} \\
+&=& \sqrt {E[(\frac {dlnL} {d\theta} \frac {d\theta} {d\delta}^2)]} = \sqrt {E[(\frac {dlnL} {d\delta})^2]} \\
+&=& \sqrt {I(\delta)}
 \end{matrix}
 $$
 
 
-따라서 
+
+
+Jeffrey's prior 이 왜 모수를 변환시키는 과정에서 invariant 인지 살펴보자. 우선 모수 &theta; 와 jeffrey's prior을 보면
 $$
-\xi_\gamma^J(h(\theta)) = const \times\sqrt {I_\gamma^F(h(\theta))} = const \times \frac {\sqrt {I_\theta^F(\theta)}} {|h^`(\theta)|} = \frac {\xi_\theta^J(\theta)} {|h^`(\theta)|}
+\pi(\theta) \propto \sqrt {-E[ \frac {\partial^2 ln L} {\partial \theta^2}]}
 $$
+
+
+사후분포는 likelihood 와 prior의 곱에 비례한다.
+$$
+p(\theta|x) \propto L(x|\theta)\pi(\theta) = L(x|\theta)\sqrt {-E[ \frac {\partial^2 ln L} {\partial \theta^2}]} = L(x|\theta) \sqrt {E[ (\frac {\partial ln L} {\partial \theta})^2]}
+$$
+
+
+이제 모수가 변수 변환으로 새로운 모수 $\delta(\theta)$ 를 가정하자. 그러면
+$$
+\begin{matrix}
+p(\delta|x) &=& p(\theta(\delta)|x)|\frac {d\theta} {d\delta}| \\
+&\propto& L(x|\theta(\delta)) \sqrt {E[ (\frac {\partial ln L} {\partial \theta})^2]} \\
+&\propto& L(x|\theta(\delta)) \sqrt {E[ (\frac {\partial ln L} {\partial \theta} \frac {\partial \theta} {\partial \delta})^2]}
+\end{matrix}
+$$
+
+
+반대로 시작부터 변화시킨 모수 $\delta$ 를 사용할 수있다. jeffrey'r prior을 베이즈 정리에 사용하면
+$$
+\begin{matrix}
+p(\delta|x) &\propto& L(x|\delta)\sqrt{-E[\frac {\partial^2 lnL} {\partial \delta^2}]} \\
+&\propto&  L(x|\delta)\sqrt{-E[(\frac {\partial lnL} {\partial \delta})^2]} \\
+&\propto&  L(x|\delta)\sqrt {E[ (\frac {\partial ln L} {\partial \theta} \frac {\partial \theta} {\partial \delta})^2]}
+\end{matrix}
+$$
+위의 식이랑 똑같은 결과를 도출할 수 있다. jeffreys prior을 사용하면 모수의 선택에 있어서 invariant한 특성을 보여준다.
 
 
 
@@ -176,7 +200,7 @@ $$
 $$
 I^F(\mu) = nI_1^F(\mu) = n/\sigma^2 = const, \space -\infin<\mu<\infin
 $$
-모든 모수 공간에서 상수형태로 나온다!. 하지만 이런 상수형태의 prior이라면 $\int_{-\infin}^{\infin} du = \infin$ . 따라서 improper prior이다. 
+모든 모수 공간에서 상수형태로 나온다!. 하지만 이런 상수형태의 prior이라면 $\int_{-\infin}^{\infin} du = \infin$ . 따라서 improper prior이다.(범위가 무제한적인게 적합하지 않다는 의미) 
 
 jeffrey's prior과 관련된 posterior은 
 $$
@@ -187,75 +211,6 @@ proper pdf 형태로 나온다. 이경우 jeffre's prior은 acceptable함.
 재밌는 점은 전통적인 방식의 추론이랑 제프리prior을 이용한 bayesian inference와 같은 결과를 준다는것. 평균값과 최빈값 은 $\overset {-}{x}$ MLE 추정으로 얻은 $\hat{\mu}_{MLE}(x) $ 와 같다. 100(1-&alpha;)% central posterior credible interval과 100(1-&alpha;)% 신뢰구간과 $\overset {-} {x} \pm \sigma z(\alpha)/\sqrt {n}$ . 
 
 
-
-
-
-1. p에 대해 uniform prior을 사용하는 경우 [0,1] 모든 범위에서 동일한 확률을 가진다. 정보량이 무차별적이다. p와 &delta; 는 one-to-one 대응이 되고 p가 가지는 정보량 만큼 &delta;도 동일하게 가져야 한다. 이것이 **'invariance property'**이다. change of variable로 그 형태가 바뀌어도 동일한 정보량을 가져야 한다.
-2. 
-
-
-
-$X \sim f(x|\theta)$ 과 같은 모델이 있다.
-$$
-I_{ij}(\theta) = E_{[X|\theta]} \frac {\partial^2}{\partial \theta_i \partial \theta_j} \left \{logf(X|\theta)  \right \}^2 = E_{[X|\theta]} [\frac {\partial^2 lnL} {\partial \theta_i \partial \theta_j}]
-$$
-
-
-
-$$
-E_{[X|\theta]} [\frac {\partial^2 lnL} {\partial \theta_i \partial \theta_j}] = \int L \frac {1} {L} \frac {\partial L} {\partial \theta_i} \frac {\partial lnL} {\partial \theta_j} dx
-$$
-
-
-
-$$
-\frac {\partial} {\partial \theta}(L \frac {\partial lnL} { \partial \theta}) = L \frac  {\partial^2 lnL} {\partial \theta^2} +\frac {\partial lnL} {\partial \theta} \frac {\partial L} {\partial \theta}
-$$
-
-$$
-\begin{matrix}
-E_{[X|\theta]} [\frac {\partial^2 lnL} {\partial \theta_i \partial \theta_j}] &=& \int [\frac {\partial} {\partial \theta}(L \frac {\partial lnL} { \partial \theta}) -  L \frac  {\partial^2 lnL} {\partial \theta^2}]dx \\
-&=& \frac {\partial} {\partial \theta} \int L \frac {\partial lnL} { \partial \theta} dx - E[\frac {\partial^2 lnL} {\partial \theta^2}] \\
-&=& \frac {\partial} {\partial \theta} \int L \frac {1} {L} \frac {\partial L} {\partial \theta}dx - E[\frac {\partial^2 lnL} {\partial \theta^2}] \\
-&=& \frac {\partial^2} {\partial \theta^2} \int L dx - E[\frac {\partial^2 lnL} {\partial \theta^2}] \\
-&=& - E[\frac {\partial^2 lnL} {\partial \theta^2}] \\
-\end{matrix}
-$$
-
-
-$\int L dx = 1$ 왜냐면 모든 데이터 공간에서의 적분은 1이기 때문이. 자연스럽게 이자 적분이 0이된다.
-
-Jeffrey's prior 이 왜 모수를 변환시키는 과정에서 invariant 인지 살펴보자. 우선 모수 &theta; 와 jeffrey's prior을 보면
-$$
-\pi(\theta) \propto \sqrt {-E[ \frac {\partial^2 ln L} {\partial \theta^2}]}
-$$
-
-
-사후분포는 likelihood 와 prior의 곱에 비례한다.
-$$
-p(\theta|x) \propto L(x|\theta)\pi(\theta) = L(x|\theta)\sqrt {-E[ \frac {\partial^2 ln L} {\partial \theta^2}]} = L(x|\theta) \sqrt {E[ (\frac {\partial ln L} {\partial \theta})^2]}
-$$
-
-
-이제 모수가 변수 변환으로 새로운 모수 &gamma;(&theta;) 를 가정하자. 그러면
-$$
-\begin{matrix}
-p(\gamma|x) &=& p(\theta(\gamma)|x)|\frac {d\theta} {d\gamma}| \\
-&\propto& L(x|\theta(\gamma)) \sqrt {E[ (\frac {\partial ln L} {\partial \theta})^2]} \\
-&\propto& L(x|\theta(\gamma)) \sqrt {E[ (\frac {\partial ln L} {\partial \theta} \frac {\partial \theta} {\partial \gamma})^2]}
-\end{matrix}
-$$
-
-
-반대로 시작부터 변화시킨 모수 &gamma; 를 사용할 수있다. jeffrey'r prior을 베이즈 정리에 사용하면
-$$
-\begin{matrix}
-p(\gamma|x) &\propto& L(x|\gamma)\sqrt{-E[\frac {\partial^2 lnL} {\partial \gamma^2}]} \\
-&\propto&  L(x|\gamma)\sqrt{-E[(\frac {\partial lnL} {\partial \gamma})^2]} \\
-&\propto&  L(x|\gamma)\sqrt {E[ (\frac {\partial ln L} {\partial \theta} \frac {\partial \theta} {\partial \gamma})^2]}
-\end{matrix}
-$$
-위의 식이랑 똑같은 결과를 도출할 수 있다. jeffreys prior을 사용하면 모수의 선택에 있어서 invariant한 특성을 보여준다.
 
 
 
@@ -281,3 +236,5 @@ $$
 
 
 https://stats.stackexchange.com/questions/38962/why-is-the-jeffreys-prior-useful
+
+https://en.wikipedia.org/wiki/Jeffreys_prior
